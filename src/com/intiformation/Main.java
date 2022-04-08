@@ -29,14 +29,16 @@ public class Main {
 		ListeMedicament.add(m1);
 		ListeMedicament.add(m2);
 		
-		System.out.println("Que voulez vous faire ? "
-				+ "\n1 Afficher les informations d'un client ou d'un médicament"
-				+ "\n2 Approvisionner"
-				+ "\n3 Traiter un Achat"
-				+ "\n4 Quitter");
 		
-	
-		int key = sc.nextInt();
+		
+		int key; 
+		do {
+			System.out.println("Que voulez vous faire ? "
+					+ "\n1 Afficher les informations d'un client ou d'un médicament"
+					+ "\n2 Approvisionner"
+					+ "\n3 Traiter un Achat"
+					+ "\n4 Quitter");
+		key = sc.nextInt();
 		switch (key) {
 		case 1 : 
 			afficherInfos();
@@ -63,7 +65,7 @@ public class Main {
 			break;
 	
 	}
-		
+		} while (key>0 && key<4);
 		
 }
 	
@@ -74,40 +76,82 @@ public class Main {
 		if(sc.nextInt()==1) 
 		{
 			lireClient ();
-			
 		}
 		else
 		{
-//			lireMedicament
-			System.out.println();
+			lireMedicament ();
 		}
 		
 	}
 
 	
 	public static void approvisionner()
+	
 	{
-		
+		int num = lireMedicament();
+		if (num != -1) {
+			System.out.println("Quelle quantité voulez-vous approvisionner ?");
+			ListeMedicament.get(num).setStock(sc.nextInt()+ListeMedicament.get(num).getStock());
+			System.out.println("Voici les informations du médicament : " + ListeMedicament.get(num).getNom()+ "\n " + ListeMedicament.get(num));
+		}
+
 	}
 	
 	public static void achat()
 	{
-		
+		int nume = lireClient ();
+		if (nume != -1)
+		{
+	
+		}
 	}
 	
 	
-	public static void lireClient ()
+	public static int lireClient ()
 	{
+		int nume =-1;
 		System.out.println("Veuillez saisir le nom du client : ");
 		String nom = sc.next();
 		for(int i = 0; i < ListeClient.size(); i++)
 		{
-			if(ListeClient.get(i).getNom() == nom)
+			boolean TrouverNom = false;
+			if(ListeClient.get(i).getNom().contains(nom))
 			{
+				TrouverNom = true; 
+				nume = i;
 			System.out.println("Voici les information du client : " + nom + "\n " + ListeClient.get(i));	
+			break;
 			}
+			
+				System.err.println("Il n'existe pas de client à ce nom");
+				break;
+			
 		}
-		
+		return nume;
+	}
+	
+	public static int lireMedicament ()
+	{
+		int num =-1;
+		System.out.println("Veuillez saisir le nom du médicament : ");
+		String nom = sc.next();
+		for(int i = 0; i < ListeMedicament.size(); i++)
+		{
+			boolean TrouverNom = false;
+			if(ListeMedicament.get(i).getNom().contains(nom))
+			{
+				TrouverNom = true; 
+				num = i;
+				
+			System.out.println("Voici les information du médicament : " + nom + "\n " + ListeMedicament.get(i));	
+			break;
+			}
+			
+				System.err.println("Il n'existe pas de médicament à ce nom");
+				break;
+			
+		}
+		return num;
 	}
 	
 }

@@ -19,15 +19,7 @@ public class Medicament {
 		this.stock = stock;
 	}
 
-	
-	
-	public void lireMedicament ()
-	{
-		
-	}
-	
-	
-	
+
 	
 	
 
