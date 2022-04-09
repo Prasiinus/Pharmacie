@@ -71,15 +71,25 @@ public class Main {
 	
 	public static void afficherInfos()
 	{
-		System.out.println("Quels informations voulez vous afficher ? \n1 : Client \n2 : Medicament");
+		System.out.println("Quels informations voulez vous afficher ? "
+				+ "\n1 : Client "
+				+ "\n2 : Medicament");
 		
 		if(sc.nextInt()==1) 
 		{
-			lireClient ();
+			int num = lireClient ();
+			if (num != -1)
+			{
+				System.out.println("Voici les information du client : " + ListeClient.get(num).getNom() + "\n " + ListeClient.get(num));	
+			}
 		}
 		else
 		{
-			lireMedicament ();
+			int num = lireMedicament ();
+			if (num != -1)
+			{
+				System.out.println("Voici les information du médicament : " + ListeMedicament.get(num).getNom() + "\n " + ListeMedicament.get(num));	
+			}
 		}
 		
 	}
@@ -89,10 +99,12 @@ public class Main {
 	
 	{
 		int num = lireMedicament();
-		if (num != -1) {
+		if (num != -1) 
+		{	
+			System.out.println("Le stock actuel pour le " + ListeMedicament.get(num).getNom() + " est de : " + ListeMedicament.get(num).getStock());
 			System.out.println("Quelle quantité voulez-vous approvisionner ?");
 			ListeMedicament.get(num).setStock(sc.nextInt()+ListeMedicament.get(num).getStock());
-			System.out.println("Voici les informations du médicament : " + ListeMedicament.get(num).getNom()+ "\n " + ListeMedicament.get(num));
+			System.out.println("Voici le nouveau stock pour le " + ListeMedicament.get(num).getNom()+ " : " + ListeMedicament.get(num).getStock());
 		}
 
 	}
@@ -100,10 +112,28 @@ public class Main {
 	public static void achat()
 	{
 		int nume = lireClient ();
-		if (nume != -1)
-		{
-	
-		}
+		int num = lireMedicament();
+			
+		System.out.println("Quelle est la quantité achetée ?");
+		int quantite = sc.nextInt();
+		
+		if (nume != -1 && num !=-1)
+		
+			
+			if (ListeMedicament.get(num).getStock() - quantite>=0)
+			{
+				
+				ListeMedicament.get(num).setStock(-quantite +ListeMedicament.get(num).getStock());
+				ListeClient.get(nume).setCredit(quantite*ListeMedicament.get(num).getPrix()+ListeClient.get(nume).getCredit());
+				System.out.println("Combien le client a t'il payé ?");
+				ListeClient.get(nume).setCredit(-sc.nextInt()+ListeClient.get(nume).getCredit());
+				System.out.println("Voici le nouveau stock pour le " + ListeMedicament.get(num).getNom()+ " : " + ListeMedicament.get(num).getStock());
+				System.out.println("Voici le nouveau credit du client " + ListeClient.get(nume).getNom()+ " : " + ListeClient.get(nume).getCredit());
+			}
+			else
+			{
+				System.out.println("Il n'y a plus de "+ ListeMedicament.get(num).getNom()+ " en stock");
+			}
 	}
 	
 	
@@ -112,20 +142,24 @@ public class Main {
 		int nume =-1;
 		System.out.println("Veuillez saisir le nom du client : ");
 		String nom = sc.next();
+		boolean TrouverNom = false;
+		
 		for(int i = 0; i < ListeClient.size(); i++)
 		{
-			boolean TrouverNom = false;
+			
 			if(ListeClient.get(i).getNom().contains(nom))
 			{
 				TrouverNom = true; 
 				nume = i;
-			System.out.println("Voici les information du client : " + nom + "\n " + ListeClient.get(i));	
-			break;
 			}
-			
-				System.err.println("Il n'existe pas de client à ce nom");
-				break;
-			
+									
+		}
+		
+		if (TrouverNom == false) {
+		
+		System.err.println("Il n'existe pas de client à ce nom essayez à nouveau");	
+		return lireClient ();
+		
 		}
 		return nume;
 	}
@@ -135,22 +169,25 @@ public class Main {
 		int num =-1;
 		System.out.println("Veuillez saisir le nom du médicament : ");
 		String nom = sc.next();
+		boolean TrouverNom = false;
+		
 		for(int i = 0; i < ListeMedicament.size(); i++)
 		{
-			boolean TrouverNom = false;
+			
 			if(ListeMedicament.get(i).getNom().contains(nom))
 			{
 				TrouverNom = true; 
 				num = i;
-				
-			System.out.println("Voici les information du médicament : " + nom + "\n " + ListeMedicament.get(i));	
-			break;
+		
 			}
-			
-				System.err.println("Il n'existe pas de médicament à ce nom");
-				break;
-			
+	
 		}
+		if (TrouverNom == false) {
+			System.err.println("Il n'existe pas de médicament à ce nom essayez à nouveau");	
+			
+			
+			return lireMedicament();
+			}
 		return num;
 	}
 	
