@@ -59,14 +59,31 @@ public class Main {
 			break;
 			
 		case 3 : 
-			
+			int nume = lireClient ();
+			int num = lireMedicament();
 			try {
-				achat();
+				achat(nume, nume);
 			} catch (notEnoughStockException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				
 		
+				System.out.println("Le stock maximum restant est de " + ListeMedicament.get(num).getStock() + " unités. Voulez vous acheter ce qu'il reste en stock ?"
+						+ "\n1 : Oui "
+						+ "\n2 : Non");	
+				 if(sc.nextInt()==1) 
+				 {
+					 ListeMedicament.get(num).setStock(ListeMedicament.get(num).getStock()-ListeMedicament.get(num).getStock());
+					 ListeClient.get(nume).setCredit(ListeMedicament.get(num).getStock()*ListeMedicament.get(num).getPrix()+ListeClient.get(nume).getCredit());
+					 System.out.println("Combien le client a t'il payé ?");
+					 ListeClient.get(nume).setCredit(-sc.nextInt()+ListeClient.get(nume).getCredit());
+					 System.out.println("Voici le nouveau stock pour le " + ListeMedicament.get(num).getNom()+ " : " + ListeMedicament.get(num).getStock());
+					 System.out.println("Voici le nouveau credit du client " + ListeClient.get(nume).getNom()+ " : " + ListeClient.get(nume).getCredit());
+				 }
+				 else
+				 {
+					 System.out.println("Ce n'est pas très logique mais d'accord");
+				 }
 			}
 			
 			
@@ -132,10 +149,9 @@ public class Main {
 
 	}
 	
-	public static int achat() throws notEnoughStockException
+	public static int achat(int num, int nume) throws notEnoughStockException
 	{
-		int nume = lireClient ();
-		int num = lireMedicament();
+		
 			
 		System.out.println("Quelle est la quantité achetée ?");
 		int quantite = sc.nextInt();
