@@ -19,8 +19,6 @@ public class Medicament {
 		this.stock = stock;
 	}
 
-
-	
 	
 
 	public String getNom() {

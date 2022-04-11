@@ -21,14 +21,6 @@ public class Client {
 	}
 
 
-	
-	
-	
-	
-	
-	
-	
-
 	public String getNom() {
 		return nom;
 	}

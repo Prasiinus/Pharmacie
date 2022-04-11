@@ -3,11 +3,14 @@ package com.intiformation;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.intiformation.Exception.nbMedicamentNegException;
+import com.intiformation.Exception.notEnoughStockException;
+
 
 
 public class Main {
-	static ArrayList<Client> ListeClient = new ArrayList<Client>();
-	static ArrayList<Medicament> ListeMedicament = new ArrayList<Medicament>();
+	public static ArrayList<Client> ListeClient = new ArrayList<Client>();
+	protected static ArrayList<Medicament> ListeMedicament = new ArrayList<Medicament>();
 	static Scanner sc = new Scanner(System.in);
 	
 	public static void main(String[] args) {
@@ -33,8 +36,8 @@ public class Main {
 		
 		int key; 
 		do {
-			System.out.println("Que voulez vous faire ? "
-					+ "\n1 Afficher les informations d'un client ou d'un médicament"
+			System.out.println("\nQue voulez vous faire ? "
+					+ "\n\n1 Afficher les informations d'un client ou d'un médicament"
 					+ "\n2 Approvisionner"
 					+ "\n3 Traiter un Achat"
 					+ "\n4 Quitter");
@@ -45,12 +48,28 @@ public class Main {
 			
 			break;
 		case 2 : 
-			approvisionner();
+			try {
+				approvisionner();
+			} catch (nbMedicamentNegException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			
 			break;
 			
 		case 3 : 
-			achat();
+			
+			try {
+				achat();
+			} catch (notEnoughStockException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+		
+			}
+			
+			
 			
 			break;
 			
@@ -95,21 +114,25 @@ public class Main {
 	}
 
 	
-	public static void approvisionner()
+	public static void approvisionner() throws nbMedicamentNegException
 	
 	{
 		int num = lireMedicament();
+		System.out.println("Quelle quantitée voulez-vous approvisionner ? (Le stock actuel pour le " + ListeMedicament.get(num).getNom() + " est de : " + ListeMedicament.get(num).getStock()+")");
+		int unite = sc.nextInt();
+		
 		if (num != -1) 
-		{	
-			System.out.println("Le stock actuel pour le " + ListeMedicament.get(num).getNom() + " est de : " + ListeMedicament.get(num).getStock());
-			System.out.println("Quelle quantité voulez-vous approvisionner ?");
-			ListeMedicament.get(num).setStock(sc.nextInt()+ListeMedicament.get(num).getStock());
-			System.out.println("Voici le nouveau stock pour le " + ListeMedicament.get(num).getNom()+ " : " + ListeMedicament.get(num).getStock());
-		}
+			if (unite<0)
+				throw new nbMedicamentNegException();
+			else
+			{
+				ListeMedicament.get(num).setStock(unite+ListeMedicament.get(num).getStock());
+				System.out.println("Voici le nouveau stock pour le " + ListeMedicament.get(num).getNom()+ " : " + ListeMedicament.get(num).getStock());
+			}
 
 	}
 	
-	public static void achat()
+	public static int achat() throws notEnoughStockException
 	{
 		int nume = lireClient ();
 		int num = lireMedicament();
@@ -118,8 +141,7 @@ public class Main {
 		int quantite = sc.nextInt();
 		
 		if (nume != -1 && num !=-1)
-		
-			
+					
 			if (ListeMedicament.get(num).getStock() - quantite>=0)
 			{
 				
@@ -132,8 +154,9 @@ public class Main {
 			}
 			else
 			{
-				System.out.println("Il n'y a plus de "+ ListeMedicament.get(num).getNom()+ " en stock");
+				throw new notEnoughStockException();
 			}
+		return num & nume;
 	}
 	
 	
