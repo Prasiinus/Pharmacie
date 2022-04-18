@@ -41,6 +41,7 @@ public class Main {
 					+ "\n2 Approvisionner"
 					+ "\n3 Traiter un Achat"
 					+ "\n4 Quitter");
+			
 		key = sc.nextInt();
 		switch (key) {
 		case 1 : 
@@ -62,7 +63,7 @@ public class Main {
 			int nume = lireClient ();
 			int num = lireMedicament();
 			try {
-				achat(nume, nume);
+				achat(num, nume);
 			} catch (notEnoughStockException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
